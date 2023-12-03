@@ -1,0 +1,3 @@
+C:/Users/Cihan/CLionProjects/zombies/cmake-build-debug/CMakeFiles/zombies.dir
+C:/Users/Cihan/CLionProjects/zombies/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Cihan/CLionProjects/zombies/cmake-build-debug/CMakeFiles/rebuild_cache.dir
