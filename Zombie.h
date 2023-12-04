@@ -10,7 +10,7 @@ private:
 
 public:
     Zombie();
-    Zombie(City* city, int width, int height);
+    Zombie(City* city, int x, int y);
     ~Zombie() override;
 
     void move() override;

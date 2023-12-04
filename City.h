@@ -1,6 +1,7 @@
 #ifndef CITY_H
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -13,6 +14,7 @@ class City
 {
 protected:
 	Organism *grid[GRID_HEIGHT][GRID_WIDTH];
+    vector<Organism*> organisms;
 
 public:
 	City();

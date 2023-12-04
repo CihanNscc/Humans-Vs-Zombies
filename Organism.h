@@ -12,8 +12,6 @@ class Organism
 protected:
 	int x;
 	int y;
-	int width;
-	int height;
 	bool moved;
 	City *city;
     char organismType;
@@ -23,7 +21,7 @@ protected:
 
 public:
 	Organism();
-	Organism( City *city, int width, int height, char organismType, char asciiRepresentation );
+	Organism( City *city, int x, int y, char organismType, char asciiRepresentation );
 	virtual ~Organism();
 
 	virtual void move() = 0;

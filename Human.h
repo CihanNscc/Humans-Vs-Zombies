@@ -7,7 +7,7 @@ class Human : public Organism
     int recruitCounter;
 public:
 	Human(); 
-	Human( City *city, int width, int height );
+	Human( City *city, int x, int y );
 	~Human() override;
 
     void move() override;

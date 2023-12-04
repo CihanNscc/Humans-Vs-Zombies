@@ -8,17 +8,17 @@
 
 using namespace std;
 
-Organism::Organism() : x(0), y(0), width(0), height(0), moved(false), city(nullptr), organismType('U'), asciiRepresentation('U') {}
+Organism::Organism() : x(0), y(0), moved(false), city(nullptr), organismType('U'), asciiRepresentation('U') {}
 
-Organism::Organism(City* city, int width, int height, char organismType, char asciiRepresentation)
-        : x(0), y(0), width(width), height(height), moved(false), city(city), organismType(organismType), asciiRepresentation(asciiRepresentation) {}
+Organism::Organism(City* city, int x, int y, char organismType, char asciiRepresentation)
+        : x(x), y(y), moved(false), city(city), organismType(organismType), asciiRepresentation(asciiRepresentation) {}
 
-Organism::~Organism() {}
+Organism::~Organism() = default;
 
-void Organism::setPosition(int x, int y)
+void Organism::setPosition(int xCoordinate, int yCoordinate)
 {
-    this->x = x;
-    this->y = y;
+    this->x = xCoordinate;
+    this->y = yCoordinate;
 }
 
 void Organism::endTurn()

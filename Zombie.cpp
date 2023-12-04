@@ -3,7 +3,7 @@
 
 Zombie::Zombie() : Organism(nullptr, 0, 0, 'Z', ZOMBIE_CH), breedCounter(0), starveCounter(0) {}
 
-Zombie::Zombie(City* city, int width, int height) : Organism(city, width, height, 'Z', ZOMBIE_CH), breedCounter(0), starveCounter(0) {}
+Zombie::Zombie(City* city, int x, int y) : Organism(city, x, y, 'Z', ZOMBIE_CH), breedCounter(0), starveCounter(0) {}
 
 Zombie::~Zombie() = default;
 

@@ -4,6 +4,10 @@
 #include "Human.h"
 #include "Zombie.h"
 
+#include <vector>
+#include <algorithm> // for std::shuffle
+#include <random>    // for std::default_random_engine
+
 City::City() {
     // Initialize the grid with nullptr (empty)
     for (int i = 0; i < GRID_HEIGHT; ++i) {
@@ -19,7 +23,7 @@ City::City() {
         int y = rand() % (GRID_HEIGHT / 2) + (quadrant / 2) * GRID_HEIGHT / 2;
 
         if (grid[y][x] == nullptr) {
-            grid[y][x] = new Zombie(this, 1, 1);
+            grid[y][x] = new Zombie(this, x, y);
         } else {
             --i;
         }
@@ -31,7 +35,7 @@ City::City() {
         int y = rand() % GRID_HEIGHT;
 
         if (grid[y][x] == nullptr) {
-            grid[y][x] = new Human(this, 1, 1);
+            grid[y][x] = new Human(this, x, y);
         } else {
             --i;
         }
@@ -63,13 +67,22 @@ void City::setOrganism(Organism* organism, int x, int y) {
 }
 
 void City::turn() {
-    // Move organisms in the city
+    // Collect all organisms in the city
+    organisms.clear();
     for (int i = 0; i < GRID_HEIGHT; ++i) {
         for (int j = 0; j < GRID_WIDTH; ++j) {
             if (grid[i][j] != nullptr) {
-                grid[i][j]->move();
+                organisms.push_back(grid[i][j]);
             }
         }
+    }
+
+    // Shuffle the organisms for random order
+    std::shuffle(organisms.begin(), organisms.end(), std::default_random_engine(std::random_device{}()));
+
+    // Move organisms in the city
+    for (Organism* organism : organisms) {
+        organism->move();
     }
 }
 
