@@ -35,7 +35,7 @@ int main() {
 //        city->countOrganisms(Z or H goes here);// run once for each type
         cout << *city; //prints city
 
-        city->deleteMarkedOrganisms();
+        city->deleteOrMutateMarkedOrganisms();
 //        cout << "GENERATION " << city->getGeneration() << endl;
 //        cout << "HUMANS: " << city->countType(HUMAN_CH) << endl;
 //        cout << "ZOMBIES: " << city->countType(ZOMBIE_CH) << endl;

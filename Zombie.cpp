@@ -5,9 +5,9 @@
 #include <algorithm>
 #include <random>
 
-Zombie::Zombie() : Organism(nullptr, 0, 0, 'Z', ZOMBIE_CH, false), breedCounter(0), starveCounter(0) {}
+Zombie::Zombie() : Organism(nullptr, 0, 0, 'Z', ZOMBIE_CH, false, false), breedCounter(0), starveCounter(0) {}
 
-Zombie::Zombie(City* city, int x, int y) : Organism(city, x, y, 'Z', ZOMBIE_CH, false), breedCounter(0), starveCounter(0) {}
+Zombie::Zombie(City* city, int x, int y) : Organism(city, x, y, 'Z', ZOMBIE_CH, false, false), breedCounter(0), starveCounter(0) {}
 
 Zombie::~Zombie() = default;
 
@@ -17,7 +17,7 @@ void Zombie::move() {
     } else {
         if (checkAdjacentHumans()) {
             if (breedCounter >= ZOMBIE_BREED) {
-               // breed();
+                breed();
                 breedCounter = 0;
             } else {
                 eat();
@@ -33,6 +33,7 @@ void Zombie::move() {
 }
 
 void Zombie::breed() {
+    // Find an adjacent human and convert it into a zombie
     for (int i = -1; i <= 1; ++i) {
         for (int j = -1; j <= 1; ++j) {
             if ((i == 0 || j == 0) && (i != 0 || j != 0)) { // Exclude the current cell
@@ -43,19 +44,18 @@ void Zombie::breed() {
                 if (newX >= 0 && newX < GRID_WIDTH && newY >= 0 && newY < GRID_HEIGHT) {
                     // Check if the adjacent cell contains a human
                     Organism* adjacentOrganism = city->getOrganism(newX, newY);
-                    cout << "Value at (" << newX << ", " << newY << "): " << adjacentOrganism << endl;
-
                     if (adjacentOrganism != nullptr && adjacentOrganism->organismType == 'H') {
-                        // Convert the adjacent human into a zombie
-                        delete adjacentOrganism;
-                        city->setOrganism(new Zombie(city, newX, newY), newX, newY);
+                        // Mark the adjacent human for removal
+                        adjacentOrganism->markForMutation();
+                        // cout << "A human got mutated." << endl;
                         breedCounter = 0;
-                        return;
+                        return; // Exit the function after successful "eat"
                     }
                 }
             }
         }
     }
+    // No adjacent humans found to eat
 }
 
 
@@ -129,7 +129,6 @@ void Zombie::moveRandom() {
             }
         }
     }
-
     // If all directions are occupied or outside the city boundaries, the zombie stays in the current cell
 }
 
@@ -148,7 +147,7 @@ void Zombie::eat() {
                     if (adjacentOrganism != nullptr && adjacentOrganism->organismType == 'H') {
                         // Mark the adjacent human for removal
                         adjacentOrganism->markForRemoval();
-                        cout << "A human got eaten." << endl;
+                        // cout << "A human got eaten." << endl;
                         starveCounter = 0;
                         return; // Exit the function after successful "eat"
                     }

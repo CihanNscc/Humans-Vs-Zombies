@@ -19,11 +19,12 @@ protected:
 
 private:
     bool markedForRemoval;
+    bool markedForMutation;
 
 public:
     char organismType;
 	Organism();
-	Organism( City *city, int x, int y, char organismType, char asciiRepresentation, bool markedForRemoval );
+	Organism( City *city, int x, int y, char organismType, char asciiRepresentation, bool markedForRemoval, bool markedForMutation );
 	virtual ~Organism();
 
 	virtual void move() = 0;
@@ -36,6 +37,8 @@ public:
 	bool isTurn();
     void markForRemoval();
     bool isMarkedForRemoval() const;
+    void markForMutation();
+    bool isMarkedForMutation() const;
     int getX() const;
     int getY() const;
 

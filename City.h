@@ -22,7 +22,7 @@ public:
 
 	Organism *getOrganism( int x, int y );
 	void setOrganism( Organism *organism, int x, int y );
-	void deleteMarkedOrganisms();
+	void deleteOrMutateMarkedOrganisms();
 
 	void turn();
     void reset();

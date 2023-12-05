@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm> // for std::shuffle
 #include <random>    // for std::default_random_engine
+#include <set>
 
 City::City() {
     // Initialize the grid with nullptr (empty)
@@ -66,19 +67,40 @@ void City::setOrganism(Organism* organism, int x, int y) {
     }
 }
 
-void City::deleteMarkedOrganisms() {
+void City::deleteOrMutateMarkedOrganisms() {
+    // Use a set to keep track of unique organisms to delete
+    std::set<Organism*> organismsToDelete;
+
     // Erase-remove idiom to remove and delete marked organisms
     organisms.erase(std::remove_if(organisms.begin(), organisms.end(),
-                                   [this](Organism* organism) {
-                                       bool marked = organism->isMarkedForRemoval();
-                                       if (marked) {
+                                   [this, &organismsToDelete](Organism* organism) {
+                                       bool markedForRemoval = organism->isMarkedForRemoval();
+                                       bool markedForMutation = organism->isMarkedForMutation();
+
+                                       // Check if the organism is marked for removal
+                                       if (markedForRemoval) {
                                            int x = organism->getX();
                                            int y = organism->getY();
-                                           delete organism;
-                                           cout << "An organism deleted." << endl;
-                                           grid[y][x] = nullptr; // Update grid to nullptr
+
+                                           // Check if the organism is not already in the set
+                                           if (organismsToDelete.find(organism) == organismsToDelete.end()) {
+                                               organismsToDelete.insert(organism);
+
+                                               // Check if the organism is marked for mutation
+                                               if (markedForMutation) {
+                                                   // Convert the organism into a zombie
+                                                   grid[y][x] = new Zombie(this, x, y);
+                                                   // cout << "An organism mutated into a zombie." << endl;
+                                               } else {
+                                                   // Delete the organism
+                                                   delete organism;
+                                                   // cout << "An organism deleted." << endl;
+                                                   grid[y][x] = nullptr; // Update grid to nullptr
+                                               }
+                                           }
                                        }
-                                       return marked;
+
+                                       return markedForRemoval;
                                    }),
                     organisms.end());
 }

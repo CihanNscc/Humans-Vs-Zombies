@@ -8,10 +8,10 @@
 
 using namespace std;
 
-Organism::Organism() : x(0), y(0), moved(false), city(nullptr), organismType('U'), asciiRepresentation('U'), markedForRemoval(false) {}
+Organism::Organism() : x(0), y(0), moved(false), city(nullptr), organismType('U'), asciiRepresentation('U'), markedForRemoval(false), markedForMutation(false) {}
 
-Organism::Organism(City* city, int x, int y, char organismType, char asciiRepresentation, bool markedForRemoval)
-        : x(x), y(y), moved(false), city(city), organismType(organismType), asciiRepresentation(asciiRepresentation), markedForRemoval(false) {}
+Organism::Organism(City* city, int x, int y, char organismType, char asciiRepresentation, bool markedForRemoval, bool markedForMutation)
+        : x(x), y(y), moved(false), city(city), organismType(organismType), asciiRepresentation(asciiRepresentation), markedForRemoval(false), markedForMutation(false) {}
 
 Organism::~Organism() = default;
 
@@ -37,6 +37,14 @@ void Organism::markForRemoval() {
 
 bool Organism::isMarkedForRemoval() const {
     return markedForRemoval;
+}
+
+void Organism::markForMutation() {
+    markedForMutation = true;
+}
+
+bool Organism::isMarkedForMutation() const {
+    return markedForMutation;
 }
 
 
