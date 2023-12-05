@@ -16,6 +16,9 @@ public:
     void move() override;
     void breed();
     void starve();
+    bool checkAdjacentHumans();
+    void eat();
+    void moveRandom();
 };
 
 #endif

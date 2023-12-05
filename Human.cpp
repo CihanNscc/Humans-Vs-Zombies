@@ -5,9 +5,9 @@
 #include <algorithm>
 #include <random>
 
-Human::Human() : Organism(nullptr, 0, 0, 'H', HUMAN_CH), recruitCounter(0) {}
+Human::Human() : Organism(nullptr, 0, 0, 'H', HUMAN_CH, false), recruitCounter(0) {}
 
-Human::Human(City* city, int x, int y) : Organism(city, x, y, 'H', HUMAN_CH), recruitCounter(0) {}
+Human::Human(City* city, int x, int y) : Organism(city, x, y, 'H', HUMAN_CH, false), recruitCounter(0) {}
 
 Human::~Human() = default;
 

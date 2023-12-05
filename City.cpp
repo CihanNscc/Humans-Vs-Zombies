@@ -66,6 +66,23 @@ void City::setOrganism(Organism* organism, int x, int y) {
     }
 }
 
+void City::deleteMarkedOrganisms() {
+    // Erase-remove idiom to remove and delete marked organisms
+    organisms.erase(std::remove_if(organisms.begin(), organisms.end(),
+                                   [this](Organism* organism) {
+                                       bool marked = organism->isMarkedForRemoval();
+                                       if (marked) {
+                                           int x = organism->getX();
+                                           int y = organism->getY();
+                                           delete organism;
+                                           cout << "An organism deleted." << endl;
+                                           grid[y][x] = nullptr; // Update grid to nullptr
+                                       }
+                                       return marked;
+                                   }),
+                    organisms.end());
+}
+
 void City::turn() {
     // Collect all organisms in the city
     organisms.clear();
@@ -77,13 +94,13 @@ void City::turn() {
         }
     }
 
-    // Shuffle the organisms for random order
-    std::shuffle(organisms.begin(), organisms.end(), std::default_random_engine(std::random_device{}()));
+    // do something to clear marked organisms
 
     // Move organisms in the city
     for (Organism* organism : organisms) {
         organism->move();
     }
+
 }
 
 ostream& operator<<(ostream& output, City& city) {

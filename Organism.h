@@ -14,14 +14,16 @@ protected:
 	int y;
 	bool moved;
 	City *city;
-    char organismType;
     char asciiRepresentation;
-
 	enum { WEST, NORTH, EAST, SOUTH, NUM_DIRECTIONS };
 
+private:
+    bool markedForRemoval;
+
 public:
+    char organismType;
 	Organism();
-	Organism( City *city, int x, int y, char organismType, char asciiRepresentation );
+	Organism( City *city, int x, int y, char organismType, char asciiRepresentation, bool markedForRemoval );
 	virtual ~Organism();
 
 	virtual void move() = 0;
@@ -32,6 +34,10 @@ public:
 	void setPosition( int x, int y );
 	void endTurn();
 	bool isTurn();
+    void markForRemoval();
+    bool isMarkedForRemoval() const;
+    int getX() const;
+    int getY() const;
 
 	friend ostream& operator<<( ostream &output, Organism *organism );
 };

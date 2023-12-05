@@ -20,7 +20,7 @@ void ClearScreen()
 
 int main() {
     City *city = new City();
-    const int INTERVAL = 5000;
+    const int INTERVAL = 1000;
     chrono:: milliseconds interval(INTERVAL);
 
     cout << *city;
@@ -34,6 +34,8 @@ int main() {
         city->reset(); //resets moved flags
 //        city->countOrganisms(Z or H goes here);// run once for each type
         cout << *city; //prints city
+
+        city->deleteMarkedOrganisms();
 //        cout << "GENERATION " << city->getGeneration() << endl;
 //        cout << "HUMANS: " << city->countType(HUMAN_CH) << endl;
 //        cout << "ZOMBIES: " << city->countType(ZOMBIE_CH) << endl;
