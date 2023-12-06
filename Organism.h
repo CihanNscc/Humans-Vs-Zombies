@@ -28,13 +28,10 @@ public:
 	virtual ~Organism();
 
 	virtual void move() = 0;
-	//virtual void spawn() = 0;
-	//virtual int getSpecies() = 0; //this could also be coded concrete here
-	//virtual void getPosition() = 0;
 
+    char getOrganismType() const;
 	void setPosition( int x, int y );
 	void endTurn();
-	bool isTurn();
     void markForRemoval();
     bool isMarkedForRemoval() const;
     void markForMutation();

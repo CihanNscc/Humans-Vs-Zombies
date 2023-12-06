@@ -1,9 +1,8 @@
 //
-// Created by W0068332 on 11/21/2021.
+// Zombies vs Humans: Final Project
+// by Cihan Alcin (w0468444)
+// 06 DEC 2023
 //
-//Example main.cpp
-//This supposes that city->step() calls the move method of each organism in the city
-//in a single pass causing each to perform all tasks that it can.
 
 #include <iostream>
 #include <chrono>
@@ -20,25 +19,36 @@ void ClearScreen()
 
 int main() {
     City *city = new City();
-    const int INTERVAL = 1000;
+    int turnNumber = ITERATIONS;
     chrono:: milliseconds interval(INTERVAL);
 
     cout << *city;
 
-    //while (city->hasDiversity()) { //while both humans and zombies exist
-    while (true) {
+    do {
         this_thread::sleep_for(interval);
         ClearScreen();
-        city->turn(); //includes all actions
-
-        city->reset(); //resets moved flags
-//        city->countOrganisms(Z or H goes here);// run once for each type
-        cout << *city; //prints city
-
+        cout << "============================================================" << endl;
+        cout << "                        Turn: " << turnNumber << endl;
+        cout << "============================================================" << endl;
+        city->turn();
+        city->reset();
+        cout << *city;
+        city->countOrganisms();
         city->deleteOrMutateMarkedOrganisms();
-//        cout << "GENERATION " << city->getGeneration() << endl;
-//        cout << "HUMANS: " << city->countType(HUMAN_CH) << endl;
-//        cout << "ZOMBIES: " << city->countType(ZOMBIE_CH) << endl;
-    }//end while
+        turnNumber --;
+    }
+    while (city->hasDiversity() && turnNumber >= 1);
+
+    this_thread::sleep_for(interval);
+    ClearScreen();
+    cout << "============================================================" << endl;
+    cout << "                 Simulation Ended | Turn: " << turnNumber << endl;
+    cout << "============================================================" << endl;
+    city->turn();
+    city->reset();
+    cout << *city;
+    city->countOrganisms();
+    city->deleteOrMutateMarkedOrganisms();
+
 }//end main
 

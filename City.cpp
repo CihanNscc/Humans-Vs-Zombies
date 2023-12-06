@@ -1,13 +1,14 @@
+#define WIN32_LEAN_AND_MEAN
+
 #include "City.h"
 #include "Organism.h"
 #include "Gamespecs.h"
 #include "Human.h"
 #include "Zombie.h"
 
-#include <vector>
-#include <algorithm> // for std::shuffle
-#include <random>    // for std::default_random_engine
+#include <algorithm>
 #include <set>
+#include <windows.h>
 
 City::City() {
     // Initialize the grid with nullptr (empty)
@@ -90,12 +91,10 @@ void City::deleteOrMutateMarkedOrganisms() {
                                                if (markedForMutation) {
                                                    // Convert the organism into a zombie
                                                    grid[y][x] = new Zombie(this, x, y);
-                                                   // cout << "An organism mutated into a zombie." << endl;
                                                } else {
                                                    // Delete the organism
                                                    delete organism;
-                                                   // cout << "An organism deleted." << endl;
-                                                   grid[y][x] = nullptr; // Update grid to nullptr
+                                                   grid[y][x] = nullptr;
                                                }
                                            }
                                        }
@@ -116,8 +115,6 @@ void City::turn() {
         }
     }
 
-    // do something to clear marked organisms
-
     // Move organisms in the city
     for (Organism* organism : organisms) {
         organism->move();
@@ -130,12 +127,79 @@ ostream& operator<<(ostream& output, City& city) {
     for (int i = 0; i < GRID_HEIGHT; ++i) {
         for (int j = 0; j < GRID_WIDTH; ++j) {
             if (city.grid[i][j] != nullptr) {
+                output << ' ';
                 output << city.grid[i][j];
+                output << ' ';
             } else {
-                output << SPACE_CH;
+                HANDLE  hConsole;
+                hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+                SetConsoleTextAttribute(hConsole, DEFAULT_COLOR);
+                output << " - ";
             }
         }
         output << endl;
     }
     return output;
+}
+
+void City::countOrganisms() {
+    int zombieCount = 0;
+    int humanCount = 0;
+
+    // Count zombies and humans in the city
+    for (int i = 0; i < GRID_HEIGHT; ++i) {
+        for (int j = 0; j < GRID_WIDTH; ++j) {
+            if (grid[i][j] != nullptr) {
+                if (grid[i][j]->getOrganismType() == 'Z') {
+                    ++zombieCount;
+                } else if (grid[i][j]->getOrganismType() == 'H') {
+                    ++humanCount;
+                }
+            }
+        }
+    }
+
+    HANDLE  hConsole;
+    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, BOARD_COLOR);
+    // Output the counts
+    cout << "============================================================" << endl;
+    cout << "                Zombies: " << zombieCount << " |====| Humans: " << humanCount << endl;
+    cout << "============================================================" << endl;
+}
+
+bool City::hasDiversity() {
+    int zombieCount = 0;
+    int humanCount = 0;
+
+    // Count zombies and humans in the city
+    for (int i = 0; i < GRID_HEIGHT; ++i) {
+        for (int j = 0; j < GRID_WIDTH; ++j) {
+            if (grid[i][j] != nullptr) {
+                if (grid[i][j]->getOrganismType() == 'Z') {
+                    ++zombieCount;
+                } else if (grid[i][j]->getOrganismType() == 'H') {
+                    ++humanCount;
+                }
+            }
+        }
+    }
+
+    if (zombieCount == 0 || humanCount == 0) {
+        return false;
+    } else {
+        return true;
+    }
+
+}
+
+void City::reset() {
+    // Reset movement flags for all organisms
+    for (int i = 0; i < GRID_HEIGHT; ++i) {
+        for (int j = 0; j < GRID_WIDTH; ++j) {
+            if (grid[i][j] != nullptr) {
+                grid[i][j]->endTurn();
+            }
+        }
+    }
 }

@@ -1,10 +1,8 @@
+#define WIN32_LEAN_AND_MEAN
 #include "Organism.h"
 #include "City.h"
-#include "GameSpecs.h"
 
-//#include <iostream>
-//#include <windows.h>
-//#include <conio.h>
+#include <windows.h>
 
 using namespace std;
 
@@ -26,9 +24,8 @@ void Organism::endTurn()
     moved = false;
 }
 
-bool Organism::isTurn()
-{
-    return !moved;
+char Organism::getOrganismType() const {
+    return organismType;
 }
 
 void Organism::markForRemoval() {
@@ -47,30 +44,6 @@ bool Organism::isMarkedForMutation() const {
     return markedForMutation;
 }
 
-
-void City::reset() {
-    // Reset movement flags for all organisms
-    for (int i = 0; i < GRID_HEIGHT; ++i) {
-        for (int j = 0; j < GRID_WIDTH; ++j) {
-            if (grid[i][j] != nullptr) {
-                grid[i][j]->endTurn();
-            }
-        }
-    }
-}
-
-void City::countOrganisms() {
-    // Count and display the number of humans and zombies...
-}
-
-bool City::checkELE() {
-    // Check for ELE (Extinction Level Event)...
-}
-
-void City::display() {
-    // Display the city grid...
-}
-
 int Organism::getX() const {
     return x;
 }
@@ -79,34 +52,33 @@ int Organism::getY() const {
     return y;
 }
 
-//void Coloring(char asciiRepresentation) {
-//    int colorNumber = 8;
-//    switch (asciiRepresentation) {
-//        case HUMAN_CH:
-//            colorNumber = HUMAN_COLOR;
-//            break;
-//        case ZOMBIE_CH:
-//            colorNumber = ZOMBIE_COLOR;
-//            break;
-//        default:
-//            colorNumber = 8;
-//            break;
-//    }
-//
-//    HANDLE  hConsole;
-//    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-//    SetConsoleTextAttribute(hConsole, c);
-//}
+void Coloring(char asciiRepresentation) {
+    int colorNumber = 8;
+    switch (asciiRepresentation) {
+        case HUMAN_CH:
+            colorNumber = HUMAN_COLOR;
+            break;
+        case ZOMBIE_CH:
+            colorNumber = ZOMBIE_COLOR;
+            break;
+        default:
+            colorNumber = 8;
+            break;
+    }
+
+    HANDLE  hConsole;
+    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, colorNumber);
+}
 
 ostream& operator<<(ostream& output, Organism* organism) {
-//    Coloring(organism->asciiRepresentation);
+    Coloring(organism->asciiRepresentation);
     if (organism != nullptr) {
         output << organism->asciiRepresentation;
-    } else {
-        // Handle the case where organism is a null pointer
-        // You might want to print an alternative representation or handle it differently
-        output << "NULL_ORGANISM";
+        HANDLE  hConsole;
+        hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(hConsole, DEFAULT_COLOR);
     }
-//    _getch();
+
     return output;
 }

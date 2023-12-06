@@ -1,6 +1,5 @@
 #include "Zombie.h"
 #include "City.h"
-#include "Gamespecs.h"
 
 #include <algorithm>
 #include <random>
@@ -36,7 +35,7 @@ void Zombie::breed() {
     // Find an adjacent human and convert it into a zombie
     for (int i = -1; i <= 1; ++i) {
         for (int j = -1; j <= 1; ++j) {
-            if ((i == 0 || j == 0) && (i != 0 || j != 0)) { // Exclude the current cell
+            if ((i == 0 || j == 0) && (i != 0 || j != 0)) {
                 int newX = x + i;
                 int newY = y + j;
 
@@ -47,7 +46,6 @@ void Zombie::breed() {
                     if (adjacentOrganism != nullptr && adjacentOrganism->organismType == 'H') {
                         // Mark the adjacent human for removal
                         adjacentOrganism->markForMutation();
-                        // cout << "A human got mutated." << endl;
                         breedCounter = 0;
                         return; // Exit the function after successful "eat"
                     }
@@ -58,10 +56,6 @@ void Zombie::breed() {
     // No adjacent humans found to eat
 }
 
-
-
-
-
 void Zombie::starve() {
     markForRemoval();
 }
@@ -70,7 +64,7 @@ bool Zombie::checkAdjacentHumans() {
     // Check for adjacent humans in all directions (vertically, horizontally, and diagonally)
     for (int i = -1; i <= 1; ++i) {
         for (int j = -1; j <= 1; ++j) {
-            if ((i == 0 || j == 0) && (i != 0 || j != 0)) { // Exclude the current cell
+            if ((i == 0 || j == 0) && (i != 0 || j != 0)) {
                 int newX = x + i;
                 int newY = y + j;
 
@@ -79,6 +73,7 @@ bool Zombie::checkAdjacentHumans() {
                     // Check if the adjacent cell contains a human
                     if (city->getOrganism(newX, newY) != nullptr &&
                         city->getOrganism(newX, newY)->organismType == 'H') {
+
                         // Human found adjacent, return true
                         return true;
                     }
@@ -121,11 +116,11 @@ void Zombie::moveRandom() {
             // Check if the neighboring cell is empty
             if (city->getOrganism(newX, newY) == nullptr) {
                 // Move the zombie to the new cell
-                city->setOrganism(nullptr, x, y); // Clear the current cell
+                city->setOrganism(nullptr, x, y);
                 x = newX;
                 y = newY;
-                city->setOrganism(this, x, y); // Set the zombie in the new cell
-                return; // Exit the function after successful move
+                city->setOrganism(this, x, y);
+                return;
             }
         }
     }
@@ -136,7 +131,7 @@ void Zombie::eat() {
     // Find an adjacent human and convert it into a zombie
     for (int i = -1; i <= 1; ++i) {
         for (int j = -1; j <= 1; ++j) {
-            if ((i == 0 || j == 0) && (i != 0 || j != 0)) { // Exclude the current cell
+            if ((i == 0 || j == 0) && (i != 0 || j != 0)) {
                 int newX = x + i;
                 int newY = y + j;
 
@@ -147,9 +142,8 @@ void Zombie::eat() {
                     if (adjacentOrganism != nullptr && adjacentOrganism->organismType == 'H') {
                         // Mark the adjacent human for removal
                         adjacentOrganism->markForRemoval();
-                        // cout << "A human got eaten." << endl;
                         starveCounter = 0;
-                        return; // Exit the function after successful "eat"
+                        return;
                     }
                 }
             }

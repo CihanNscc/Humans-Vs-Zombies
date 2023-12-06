@@ -1,4 +1,7 @@
 #ifndef CITY_H
+#define CITY_H
+
+#include "Gamespecs.h"
 
 #include <iostream>
 #include <vector>
@@ -7,8 +10,8 @@ using namespace std;
 
 class Organism;
 
-const int GRID_WIDTH = 20;
-const int GRID_HEIGHT = 20;
+const int GRID_WIDTH = GRID_SIZE;
+const int GRID_HEIGHT = GRID_SIZE;
 
 class City
 {
@@ -27,8 +30,7 @@ public:
 	void turn();
     void reset();
     void countOrganisms();
-    bool checkELE();
-    void display();
+    bool hasDiversity();
 
 	friend ostream& operator<<( ostream &output, City &city );
 
