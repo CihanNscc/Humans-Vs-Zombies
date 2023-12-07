@@ -78,24 +78,30 @@ void City::deleteOrMutateMarkedOrganisms() {
                                        bool markedForRemoval = organism->isMarkedForRemoval();
                                        bool markedForMutation = organism->isMarkedForMutation();
 
-                                       // Check if the organism is marked for removal
-                                       if (markedForRemoval) {
+                                       if (!markedForRemoval) {
+                                           // Check if the organism is marked for mutation
+                                           if (organism->isMarkedForMutation()) {
+                                               int x = organism->getX();
+                                               int y = organism->getY();
+
+                                               if (organism->getOrganismType() == 'H') {
+                                                   grid[y][x] = new Zombie(this, x, y);
+                                               }
+                                               else if (organism->getOrganismType() == 'Z') {
+                                                   grid[y][x] = new Human(this, x, y);
+                                               }
+                                           }
+                                       }
+                                       else {
                                            int x = organism->getX();
                                            int y = organism->getY();
 
                                            // Check if the organism is not already in the set
                                            if (organismsToDelete.find(organism) == organismsToDelete.end()) {
                                                organismsToDelete.insert(organism);
-
-                                               // Check if the organism is marked for mutation
-                                               if (markedForMutation) {
-                                                   // Convert the organism into a zombie
-                                                   grid[y][x] = new Zombie(this, x, y);
-                                               } else {
-                                                   // Delete the organism
-                                                   delete organism;
-                                                   grid[y][x] = nullptr;
-                                               }
+                                               // Delete the organism
+                                               delete organism;
+                                               grid[y][x] = nullptr;
                                            }
                                        }
 

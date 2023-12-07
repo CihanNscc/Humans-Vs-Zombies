@@ -16,6 +16,7 @@ protected:
 	City *city;
     char asciiRepresentation;
 	enum { WEST, NORTH, EAST, SOUTH, NUM_DIRECTIONS };
+    enum { W, N, E, S, NW, NE, SE, SW, Z_NUM_DIRECTIONS };
 
 private:
     bool markedForRemoval;

@@ -11,19 +11,16 @@ Zombie::Zombie(City* city, int x, int y) : Organism(city, x, y, 'Z', ZOMBIE_CH, 
 Zombie::~Zombie() = default;
 
 void Zombie::move() {
-    if (starveCounter >= ZOMBIE_STARVE){
-        starve();
+    if (breedCounter >= ZOMBIE_BREED) {
+        breed();
+    } else if (checkAdjacentHumans()) {
+        eat();
     } else {
-        if (checkAdjacentHumans()) {
-            if (breedCounter >= ZOMBIE_BREED) {
-                breed();
-                breedCounter = 0;
-            } else {
-                eat();
-            }
+        if (starveCounter >= ZOMBIE_STARVE) {
+            starve();
         } else {
-            starveCounter ++;
             moveRandom();
+            starveCounter++;
         }
     }
 
@@ -35,7 +32,7 @@ void Zombie::breed() {
     // Find an adjacent human and convert it into a zombie
     for (int i = -1; i <= 1; ++i) {
         for (int j = -1; j <= 1; ++j) {
-            if ((i == 0 || j == 0) && (i != 0 || j != 0)) {
+            if (i != 0 || j != 0) {
                 int newX = x + i;
                 int newY = y + j;
 
@@ -47,7 +44,7 @@ void Zombie::breed() {
                         // Mark the adjacent human for removal
                         adjacentOrganism->markForMutation();
                         breedCounter = 0;
-                        return; // Exit the function after successful "eat"
+                        return;
                     }
                 }
             }
@@ -57,14 +54,14 @@ void Zombie::breed() {
 }
 
 void Zombie::starve() {
-    markForRemoval();
+    markForMutation();
 }
 
 bool Zombie::checkAdjacentHumans() {
     // Check for adjacent humans in all directions (vertically, horizontally, and diagonally)
     for (int i = -1; i <= 1; ++i) {
         for (int j = -1; j <= 1; ++j) {
-            if ((i == 0 || j == 0) && (i != 0 || j != 0)) {
+            if (i != 0 || j != 0) {
                 int newX = x + i;
                 int newY = y + j;
 
@@ -87,26 +84,42 @@ bool Zombie::checkAdjacentHumans() {
 
 void Zombie::moveRandom() {
     // Generate a random order for directions
-    std::vector<int> directions = {WEST, NORTH, EAST, SOUTH};
+    std::vector<int> directions = {W, N, E, S, NW, NE, SE, SW};
     std::shuffle(directions.begin(), directions.end(), std::default_random_engine(std::random_device{}()));
 
-    for (int i = 0; i < NUM_DIRECTIONS; ++i) {
+    for (int i = 0; i < Z_NUM_DIRECTIONS; ++i) {
         // Calculate new coordinates based on the selected direction
         int direction = directions[i];
         int newX = x;
         int newY = y;
 
         switch (direction) {
-            case WEST:
+            case W:
                 newX = x - 1;
                 break;
-            case NORTH:
+            case N:
                 newY = y - 1;
                 break;
-            case EAST:
+            case E:
                 newX = x + 1;
                 break;
-            case SOUTH:
+            case S:
+                newY = y + 1;
+                break;
+            case NW:
+                newX = x - 1;
+                newY = y - 1;
+                break;
+            case NE:
+                newX = x + 1;
+                newY = y - 1;
+                break;
+            case SE:
+                newX = x + 1;
+                newY = y + 1;
+                break;
+            case SW:
+                newX = x - 1;
                 newY = y + 1;
                 break;
         }
@@ -131,7 +144,7 @@ void Zombie::eat() {
     // Find an adjacent human and convert it into a zombie
     for (int i = -1; i <= 1; ++i) {
         for (int j = -1; j <= 1; ++j) {
-            if ((i == 0 || j == 0) && (i != 0 || j != 0)) {
+            if (i != 0 || j != 0) {
                 int newX = x + i;
                 int newY = y + j;
 
